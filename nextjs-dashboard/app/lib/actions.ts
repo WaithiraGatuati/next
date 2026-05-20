@@ -12,6 +12,7 @@ export async function authenticate(
   formData: FormData,
 ) {
   try {
+    console.log("called authenticate");
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
 
