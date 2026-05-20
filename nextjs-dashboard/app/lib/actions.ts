@@ -12,17 +12,7 @@ export async function authenticate(
   formData: FormData,
 ) {
   try {
-    console.log("called authenticate");
-    const email = formData.get('email') as string;
-    const password = formData.get('password') as string;
-
-    await signIn('credentials', {
-      email,
-      password,
-      redirect: false,
-    });
-
-    return undefined;
+    await signIn('credentials', formData);
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
@@ -32,7 +22,6 @@ export async function authenticate(
           return 'Something went wrong.';
       }
     }
-
     throw error;
   }
 }
