@@ -1,0 +1,4 @@
+allow build: 
+  - bycrypt true
+  - shared true
+  - unrs-resolver true
