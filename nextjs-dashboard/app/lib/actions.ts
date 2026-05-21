@@ -12,9 +12,26 @@ export async function authenticate(
   formData: FormData,
 ) {
   const redirectTo = formData.get('redirectTo')?.toString() || '/dashboard';
+  const credentials = Object.fromEntries(formData.entries());
 
   try {
-    await signIn('credentials', formData);
+    const result = await signIn('credentials', {
+      ...credentials,
+      redirect: false,
+      redirectTo,
+    });
+
+    const resultUrl = new URL(result?.toString() ?? '', 'http://localhost');
+    const error = resultUrl.searchParams.get('error');
+
+    if (error === 'CredentialsSignin') {
+      return 'Invalid credentials.';
+    }
+
+    if (error) {
+      return 'Something went wrong.';
+    }
+
     redirect(redirectTo);
   } catch (error) {
     if (error instanceof AuthError) {
