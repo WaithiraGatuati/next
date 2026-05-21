@@ -11,8 +11,11 @@ export async function authenticate(
   prevState: string | undefined,
   formData: FormData,
 ) {
+  const redirectTo = formData.get('redirectTo')?.toString() || '/dashboard';
+
   try {
     await signIn('credentials', formData);
+    redirect(redirectTo);
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
@@ -25,6 +28,7 @@ export async function authenticate(
     throw error;
   }
 }
+
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
 const FormSchema = z.object({
