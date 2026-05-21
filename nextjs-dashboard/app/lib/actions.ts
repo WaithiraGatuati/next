@@ -21,15 +21,17 @@ export async function authenticate(
       redirectTo,
     });
 
-    const resultUrl = new URL(result?.toString() ?? '', 'http://localhost');
-    const error = resultUrl.searchParams.get('error');
+    if (typeof result === 'string') {
+      const url = new URL(result, 'http://localhost');
+      const error = url.searchParams.get('error');
 
-    if (error === 'CredentialsSignin') {
-      return 'Invalid credentials.';
-    }
+      if (error === 'CredentialsSignin') {
+        return 'Invalid credentials.';
+      }
 
-    if (error) {
-      return 'Something went wrong.';
+      if (error) {
+        return 'Something went wrong.';
+      }
     }
 
     redirect(redirectTo);
